@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import br.com.cartorio.model.Cartorio;
 import br.com.cartorio.service.CartorioService;
@@ -21,29 +20,27 @@ import br.com.cartorio.service.CartorioService;
 @Controller
 @RequestMapping("/cartorio")
 public class CartorioController {
-	
+
 	@Autowired
 	private CartorioService cartorioService;
-	
+
 	@GetMapping("/pagina")
-	public ModelAndView logar() {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("src/main/resources/templates/cartorios.html");
-		return mav;
+	public String login() {
+		return "template";
 	}
-	
+
 	@GetMapping("/selecionar")
 	public ResponseEntity<List<Cartorio>> findAll() {
 		List<Cartorio> lista = cartorioService.findAll();
 		return new ResponseEntity<List<Cartorio>>(lista, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/selecionar/{id}")
 	public ResponseEntity<Cartorio> findById(@PathVariable("id") int id) {
 		Cartorio cartorio = cartorioService.findById(id);
 		return new ResponseEntity<Cartorio>(cartorio, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/inserir")
 	public ResponseEntity<Cartorio> save(@RequestBody Cartorio cartorio) {
 		cartorioService.save(cartorio);
