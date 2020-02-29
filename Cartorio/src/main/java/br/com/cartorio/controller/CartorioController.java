@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,36 +49,36 @@ public class CartorioController {
 	}
 	
 
-	@GetMapping("/selecionar")
+	@GetMapping("/")
 	public ResponseEntity<List<Cartorio>> findAll() {
 		List<Cartorio> lista = cartorioService.findAll();
 		return new ResponseEntity<List<Cartorio>>(lista, HttpStatus.OK);
 	}
 
-	@GetMapping("/selecionar/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Cartorio> findById(@PathVariable("id") int id) {
 		Cartorio cartorio = cartorioService.findById(id);
 		return new ResponseEntity<Cartorio>(cartorio, HttpStatus.OK);
 	}
 
-	@PostMapping("/inserir") //@RequestBody
+	@PostMapping("/inserir")
 	public ModelAndView save(Cartorio cartorio) {
 		cartorioService.save(cartorio);
-		ModelAndView mav = new ModelAndView("principal");
+		ModelAndView mav = new ModelAndView("redirect:/cartorio/pagina");
 		mav.addObject("cartorios", cartorioService.findAll());
 		return mav;
 	}
 
-	@PostMapping("/atualizar/{id}") //@RequestBody @PutMapping
+	@PostMapping("/atualizar/{id}")
 	public ModelAndView update(@PathVariable("id") int id, Cartorio cartorio) {
 		cartorio.setId(id);
 		cartorioService.update(cartorio);
-		ModelAndView mav = new ModelAndView("principal");
+		ModelAndView mav = new ModelAndView("redirect:/cartorio/pagina");
 		mav.addObject("cartorios", cartorioService.findAll());
 		return mav;
 	}
 
-	@PostMapping("/deletar/{id}") //@DeleteMapping
+	@DeleteMapping("/deletar/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable("id") int id) {
 		cartorioService.deleteById(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
