@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -61,23 +64,19 @@ public class CartorioController {
 	}
 
 	@PostMapping("/inserir") //@RequestBody
-	public ModelAndView save(Cartorio cartorio) {
+	public ResponseEntity<Cartorio> save(@RequestBody Cartorio cartorio) {
 		cartorioService.save(cartorio);
-		ModelAndView mav = new ModelAndView("principal");
-		mav.addObject("cartorios", cartorioService.findAll());
-		return mav;
+		return new ResponseEntity<Cartorio>(cartorio, HttpStatus.CREATED);
 	}
 
-	@PostMapping("/atualizar/{id}") //@RequestBody @PutMapping
-	public ModelAndView update(@PathVariable("id") int id, Cartorio cartorio) {
+	@PutMapping("/atualizar/{id}") //@RequestBody @PutMapping
+	public ResponseEntity<Cartorio> update(@PathVariable("id") int id, @RequestBody Cartorio cartorio) {
 		cartorio.setId(id);
 		cartorioService.update(cartorio);
-		ModelAndView mav = new ModelAndView("principal");
-		mav.addObject("cartorios", cartorioService.findAll());
-		return mav;
+		return new ResponseEntity<Cartorio>(cartorio, HttpStatus.OK);
 	}
 
-	@PostMapping("/deletar/{id}") //@DeleteMapping
+	@DeleteMapping("/deletar/{id}") //@DeleteMapping
 	public ResponseEntity<Void> deleteById(@PathVariable("id") int id) {
 		cartorioService.deleteById(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
